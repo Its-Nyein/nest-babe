@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -36,7 +37,7 @@ export class UsersService {
         return newUser;
     }
 
-    update(id: number, updateUserDto: CreateUserDto) {
+    update(id: number, updateUserDto: UpdateUserDto) {
         this.Users = this.Users.map(user => {
             if(user.id === id) {
                 return {...user, ...updateUserDto}
