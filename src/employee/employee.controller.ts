@@ -1,21 +1,28 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { Prisma } from '@prisma/client';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
+@SkipThrottle()
 @Controller('employees')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
+  // This route will skip rate limiting.
   @Post()
   create(@Body() createEmployeeDto: Prisma.EmployeeCreateInput) {
     return this.employeeService.create(createEmployeeDto);
   }
 
+  // Rate limiting is applied to this route.
+  @SkipThrottle({ default: false})
   @Get()
   findAll(@Query('role') role?: 'Developer' | 'QATester' | 'DevOps') {
     return this.employeeService.findAll(role);
   }
 
+  // Override default configuration for Rate limiting and duration.
+  @Throttle({ short: { limit: 1, ttl: 3000}})
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.employeeService.findOne(id);
