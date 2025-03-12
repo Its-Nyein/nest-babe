@@ -8,6 +8,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { LoggerModule } from './logger/logger.module';
 import { StudentsModule } from './students/students.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [UsersModule, DatabaseModule, EmployeeModule, ThrottlerModule.forRoot([
@@ -26,7 +27,7 @@ import { StudentsModule } from './students/students.module';
       ttl: 10000,
       limit: 5
     }
-  ]), LoggerModule, StudentsModule],
+  ]), LoggerModule, StudentsModule, AuthModule],
   controllers: [AppController],
   providers: [AppService,
     {

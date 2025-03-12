@@ -39,6 +39,14 @@ export class StudentsService {
     });
   }
 
+  async findByEmail(email: string): Promise<Students | null> {
+    return this.databaseService.students.findUnique({
+      where: {
+        email
+      }
+    })
+  }
+
   async update(
     id: number,
     updateStudentsDto: Prisma.StudentsUpdateInput,
