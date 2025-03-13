@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Controller, Get, HttpCode, HttpStatus, NotImplementedException, Post, Request, UseGuards } from "@nestjs/common";
+import { Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from "@nestjs/common";
 import { PassportLocalAuthGuard } from "./guards/passport-local.guard";
 import { AuthService } from "./auth.service";
+import { JwtAuthGuard } from "./guards/jwt.guard";
 
 @Controller('auth-v2')
 export class PassportAuthController {
@@ -17,7 +19,8 @@ export class PassportAuthController {
     }
 
     @Get('me')
-    getStudentInfo() {
-        throw new NotImplementedException();
+    @UseGuards(JwtAuthGuard)
+    getStudentInfo(@Request() request) {
+        return request.user;
     }
 }
