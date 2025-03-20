@@ -65,4 +65,20 @@ export class AuthService {
         const accessToken = await this.jwtService.signAsync(tokenPayload);
         return { id: student.id, name: student.name, email: student.email, accessToken}
     }
+
+    async changePassword(input: AuthInput, newPassword: string): Promise<SignInData> {
+        const student = await this.validateStudent(input)
+        if(!student) {
+            throw new UnauthorizedException('Invalid credentials')
+        }
+
+        const newHashPassword = await bcrypt.hash(newPassword, 10)
+        await this.studentsService.update(student.id, {password: newHashPassword})
+
+        return {
+            id: student.id,
+            name: student.name,
+            email: student.email
+        }
+    }
 }

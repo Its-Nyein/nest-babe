@@ -51,6 +51,7 @@ export class StudentsService {
     id: number,
     updateStudentsDto: Prisma.StudentsUpdateInput,
   ): Promise<Students> {
+    const updateData: Prisma.StudentsUpdateInput = { ...updateStudentsDto };
     if (updateStudentsDto.password) {
       updateStudentsDto.password = await bcrypt.hash(
         updateStudentsDto.password as string,
@@ -61,7 +62,7 @@ export class StudentsService {
       where: {
         id,
       },
-      data: updateStudentsDto,
+      data: updateData,
     });
   }
 
